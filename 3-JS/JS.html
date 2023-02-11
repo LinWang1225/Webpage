@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人收入计算</title>
+    <style>
+        * {
+            margin: 0%;
+            padding: 0%;
+        }
+
+        body {
+            width: 700px;
+        }
+
+
+		table td,
+        th {
+            width: 800px;
+            padding: 10px 10px;
+            border-bottom: 1px solid #999;
+            border-right: 1px solid #999;
+            text-align: center;
+        }
+       
+		 table {
+            margin: auto;
+            border-top: 1px solid #999;
+            border-left: 1px solid #999;
+            border-spacing: 0;	<!-- 去掉单元格间隙  -->
+        }
+    
+        form {
+            text-align: left;
+        }
+
+        #line1 {
+            background-color: #E6E6E6;
+        }
+
+        #line2 {
+            color: red;
+            font-size: 50px;
+        }
+
+        .form {
+            text-align: left;
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+	<table>  <!--用一个大表格套着两个小表格实现两个表格并排显示 -->
+		<tr>
+			<td width="5%" style="float:left;margin:0px;padding:0px;">
+				<table>
+					<!--tr 设置每一行，在tr内设置td/th每一列-->
+					<tr>
+						<th>缴纳项目</th>		<!-- 定义表头单元格，表格中的文字将以粗体显示-->
+						<th>个人缴费比例%</th>
+						<th>单位缴费比例%</th>
+					</tr>
+					<tr>
+						<td>养老保险</td>
+						<td>8%</td>
+						<td>2%</td>
+					</tr>
+					<tr>
+						<td>医疗保险</td>
+						<td>2%</td>
+						<td>6-10%</td>
+					</tr>
+					<tr>
+						<td>失业保险</td>
+						<td>0.5-1%</td>
+						<td>1.50%</td>
+					</tr>
+					<tr>
+						<td>工伤保险</td>
+						<td></td>
+						<td>0.5-1.2%</td>
+					</tr>
+					<tr>
+						<td>生育保险</td>
+						<td></td>
+						<td>0.80%</td>
+					</tr>
+					<tr>
+						<td>公积金</td>
+						<td>10-12%</td>
+						<td>10-12%</td>
+					</tr>
+				</table>
+			</td>
+			<td width="500px"></td>
+			<td  width="80%" style="float:right;margin:0px;padding:0px;">
+				<table>
+					<caption><b>个人所得税税率表一（综合所得适用）</b></caption>
+					<tr id="line1">
+						<th>级数</th>
+						<th>全年应纳税所得额</th>
+						<th>税率（%）</th>
+						<th>速算扣除数</th>
+					</tr>
+					<tr>
+						<td>1</td>
+						<td>不超过36000元的</td>
+						<td>3</td>
+						<td>0</td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>超过36000元至144000元的部分</td>
+						<td>10</td>
+						<td>2520</td>
+					</tr>
+					<tr>
+						<td>3</td>
+						<td>超过144000元至300000元的部分</td>
+						<td>20</td>
+						<td>16920</td>
+					</tr>
+					<tr>
+						<td>4</td>
+						<td>超过300000元至420000元的部分</td>
+						<td>25</td>
+						<td>31920</td>
+					</tr>
+					<tr>
+						<td>5</td>
+						<td>超过420000元至660000元的部分</td>
+						<td>30</td>
+						<td>52920</td>
+					</tr>
+					<tr>
+						<td>6</td>
+						<td>超过600000元至960000元的部分</td>
+						<td>35</td>
+						<td>85920</td>
+					</tr>
+					<tr>
+						<td>7</td>
+						<td>超过960000元的部分</td>
+						<td>45</td>
+						<td>181920</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>	
+	<br>
+	<br>
+    <div>
+        全月应纳税所得额=（应发工资）-（五险一金）-5000（起征点）
+    </div>
+	<br>
+	<br>
+    <div id="line2">
+        收入部分
+    </div>
+    <div>
+        <p class="form">单位支出：</p>
+        <form>     <!--设置表单显示和按钮  -->
+            个人税前收入：<input type="number" id="initIncome" min="0"><br>
+            单位缴付四险：<input type="number" id="initInsurance" min="0"><br>
+            单位缴付一金：<input type="number" id="initFund" min="0"><br>
+            <input type="button" value="计算" onclick="calcute()"><br>
+        </form>
+    </div>
+    <div>
+        <p class="form">个人所得：</p>
+        <form>
+            账户四险：<input type="number" id="finalInsurance">（个人+单位）<br>
+            账户一金：<input type="number" id="finalFund">（个人+单位）<br>
+            税后收入：<input type="text" id="finalIncome"><br><br><br>
+        </form>
+    </div>
+
+    <script>
+        function calcute() {
+            var initIncome = parseFloat(document.getElementById("initIncome").value);
+            var monthFundIndividual = initIncome * 0.11;
+            var monthFundWork = initIncome * 0.11;
+            var monthFund = monthFundIndividual + monthFundWork;
+
+            var monthInsuranceIndividual = initIncome * 0.1075;
+            var monthInsuranceWork = initIncome * 0.313;
+            var monthInsurance = monthInsuranceIndividual + monthInsuranceWork;
+
+            var text2 = document.getElementById("initInsurance");
+            text2.value = monthInsuranceWork;
+            var text3 = document.getElementById("initFund");
+            text3.value = monthFundWork;
+            var text4 = document.getElementById("finalInsurance");
+            text4.value = monthInsurance * 12;
+            var text5 = document.getElementById("finalFund");
+            text5.value = monthFund * 12;
+
+            var tax = 0;
+            var incomeTaxPortion = (initIncome - 5000 - monthFundIndividual - monthInsuranceIndividual) * 12;
+
+
+            if (incomeTaxPortion <= 0)
+                tax = 0;
+            else if (incomeTaxPortion <= 36000)
+                tax = incomeTaxPortion * 0.03;
+            else if (incomeTaxPortion <= 144000)
+                tax = (incomeTaxPortion - 36000) * 0.1 + 36000 * 0.03;
+            else if (incomeTaxPortion <= 300000)
+                tax = (incomeTaxPortion - 144000) * 0.2 + (144000 - 36000) * 0.1 + 36000 * 0.03;
+            else if (incomeTaxPortion <= 420000)
+                tax = (incomeTaxPortion - 300000) * 0.25 + (300000 - 144000) * 0.2 + (144000 - 36000) * 0.1 + 36000 * 0.03;
+            else if (incomeTaxPortion <= 660000)
+                tax = (incomeTaxPortion - 420000) * 0.3 + (420000 - 300000) * 0.25 + (300000 - 144000) * 0.2 + (144000 - 36000) * 0.1 + 36000 * 0.03;
+            else if (incomeTaxPortion <= 960000)
+                tax = (incomeTaxPortion - 660000) * 0.35 + (660000 - 420000) * 0.3 + (420000 - 300000) * 0.25 + (300000 - 144000) * 0.2 + (144000 - 36000) * 0.1 + 36000 * 0.03;
+            else
+                tax = (incomeTaxPortion - 960000) * 0.45 + (960000 - 660000) * 0.35 + (660000 - 420000) * 0.3 + (420000 - 300000) * 0.25 + (300000 - 144000) * 0.2 + (144000 - 36000) * 0.1 + 36000 * 0.03;
+
+            var text6 = document.getElementById("finalIncome");
+            text6.value = (initIncome - monthFundIndividual - monthInsuranceIndividual) * 12 - tax;
+
+        }
+    </script>
+</body>
+
+</html>
